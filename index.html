@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        var gruposPegos = "";
+        var textoCodigoDalistaDeGrupos = "";
+        var textiCodigoDasMensagens = "";
+
+        function gerar() {
+            status("iniciando criação do codigo de bot")
+            //======================
+            //pegando os grupos
+            //======================
+            gruposPegos = document.getElementById("grupos").value;
+            status("grupos pegos: " + gruposPegos)
+            //tratando grupos enciados
+            var gruposPegosTratados = gruposPegos.replaceAll(" ", "");
+            //criado array de grupos enviados
+            var arrayDeGrupos = gruposPegosTratados.split(",");
+            status("array dos grupos tratados")
+            textoCodigoDalistaDeGrupos += "[";
+            for (x = 0; x < arrayDeGrupos.length; x++) {
+                status("item " + x + " : " + arrayDeGrupos[x]);
+                textoCodigoDalistaDeGrupos += "'" + arrayDeGrupos[x] + "',"
+            }
+            textoCodigoDalistaDeGrupos += "];"
+            status("o array de grupos para o codigo ficou assim: " + textoCodigoDalistaDeGrupos)
+            //======================
+            //pegando as mensagens
+            //======================
+            //mensagens a serem enviadas
+            mensagensASeremEviadas = document.getElementById("mensagens").value;
+            status("mesagens a serem enviadas: " + mensagensASeremEviadas);
+            var ArraymensagensASeremEviadasTratadas = mensagensASeremEviadas.split("***");
+            status("array das mensagens a serem enviadas")
+            textiCodigoDasMensagens +="["
+            for (x = 0; x < ArraymensagensASeremEviadasTratadas.length; x++) {
+                status("mensagem " + x + " : " + ArraymensagensASeremEviadasTratadas[x]);
+                textiCodigoDasMensagens += "'"+ArraymensagensASeremEviadasTratadas[x]+"',"
+            }
+            textiCodigoDasMensagens += "];"
+            status("texto do codigo das mensagens a ser enviada: "+textiCodigoDasMensagens);
+            //==========================
+            //codigo final
+            //==========================
+            //colocando a lista de grupos
+            var codigofinal = document.getElementById("codigofinal").value;
+            var codigofinalTratado = codigofinal.replaceAll("***listadosgrupos***", textoCodigoDalistaDeGrupos);
+            document.getElementById("codigofinal").innerHTML = codigofinalTratado;
+            status("lista de grupos adicionada com sucesso")
+            //colocando as mensagens
+            var codigofinal2 = document.getElementById("codigofinal").value;
+            var codigofinalTratado2 = codigofinal2.replaceAll("***listadosanuncios***", textiCodigoDasMensagens);
+            document.getElementById("codigofinal").innerHTML = codigofinalTratado2;
+            status("lista de mensagens adicionada com sucesso");
+        }
+
+        function status(t) {
+            //t : tetxo que sera impressso
+            console.log(t)
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .accordion {
+            background-color: #eee;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            transition: 0.4s;
+        }
+
+        .active,
+        .accordion:hover {
+            background-color: #ccc;
+        }
+
+        .panel {
+            padding: 0 18px;
+            display: none;
+            background-color: white;
+            overflow: hidden;
+        }
+
+        /*
+table{
+    border: 2px solid black;
+}
+tr{
+    border: 2px solid black;
+    
+}
+td{
+    border: 2px solid black;
+}
+*/
+        button:not(.accordion) {
+            margin: 3%;
+            padding: 3%;
+            width: 80%;
+        }
+
+        input {
+            margin: 3%;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <br>
+    <br>
+    <center>
+        <h2>BOT GRUPOS DE WHATSAPP</h2>
+    </center>
+    <hr>
+    <center>
+        <TAble>
+            <tr>
+                <td>
+                    <h5>COLOQUE AQUI OS LINKS DOS GRUPOS SEPARADOS POR VIRGULAS , </h5><input id="grupos" type="text"
+                        style="width: 100%;" rows="5"
+                        value="EXEMPLO: https://chat.whatsapp.com/Llg76lHYRyV1tma45avKEa, https://chat.whatsapp.com/Llg76lHYRyV1tma45avKEa, https://chat.whatsapp.com/Llg76lHYRyV1tma45avKEa">
+                </td>
+                <td>
+                    <h5>&nbsp;&nbsp;&nbsp;</h5>
+                </td>
+                <td>
+                    <h5>COLOQUE AQUI AS MENSAGENS QUE VOCÊ DESEJA ENVIAR SEPARADA POR *** </h5><input id="mensagens"
+                        rows="5" type="text" style="width: 100%;"
+                        value="EXEMPLO: MESNAGEM1 *** MENSAGEM 02 *** MENSAGEM 03">
+                </td>
+            </tr>
+            <tr>
+                <TD colspan="3">
+                    <CENTER><button onclick="gerar()">GERAR BOT</button></CENTER>
+                </TD>
+            </tr>
+            <TR>
+                <TD colspan="3">
+                    <h5>CODIGO DO BOT PARA O GOOGLE CHROME:</h5>
+                    <center>
+                        <textarea id="codigofinal" cols="30" rows="10" style="width: 80%;">
+                     var totalAnuncios = ***listadosanuncios***
+ 
+//==========================
+//lista de grupos 
+var listaGrupos = ***listadosgrupos***
+
+
+console.log("Total de grupos :" + listaGrupos.length);
+
+var linkDegruposComErro = [];
+//=========================================================================================
+function send(numero, msg) {
+
+    //=========================================
+    //aqui apesar de estar numero é o link do grupo whatsapp
+    linkapi = numero;
+    //==========================================
+    var element = document.createElement('a');
+    //element.setAttribute('href','data:text/plain;charset=utf-8,'+encodeURIComponent(text));
+    element.setAttribute('href', linkapi);
+    //aqui define o elemento coultamente
+    element.style.display = 'none';
+    //adiciona o elemento em background
+    document.body.appendChild(element);
+    //clica no elemento adicionado
+    element.click();
+    //caso nao esteja no grupo aguarda meio segundo antes de clicar no botao entrar
+    setTimeout(function () {
+        //caso nao esteja no grupo entrar
+        try {
+            document.querySelector("#app > div > span:nth-child(2) > div > div > div > div > div > div > div._2SGGH > div._30EVj.gMRg5").click();
+        } catch (err) {
+
+            console.log("ja esta no grupo msg: " + err.message);
+        }
+
+    }, 500)
+    //remove o elemento de entrar no grupo
+    setTimeout(function () {
+        document.body.removeChild(element);
+    }, 1500)
+    //aqui começa a adionar o texto na caixa antes de clicar
+    setTimeout(function () {
+
+        //======================================
+        //apos entrar no grupo vamos colocar a mensagem para ser enviada
+
+        //cria um evento de simulação do mouse para ativar o botao de enviar
+        var eventFire = (MyElement, ElementType) => {
+            var MyEvent = document.createEvent("MouseEvents");
+            MyEvent.initMouseEvent(ElementType, true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            MyElement.dispatchEvent(MyEvent);
+        };
+
+
+        //procura onde colocar a mensagem antes de enviar
+        messageBox = document.querySelectorAll("[contenteditable='true']")[1];
+
+        //recebe a mensagem que vai enviar
+        message = msg;
+
+        //quantas vezes a mensagem deve ser enviada
+        counter = 1;
+
+        for (d = 0; d < counter; d++) {
+            //cria evento de simulação de interface humana
+            var event = document.createEvent("UIEvents");
+
+            //remove a mensagem de digite um texto aqui
+            try {
+
+                messageBox.innerHTML = message.replace(/ /gm, ' ');
+                event.initUIEvent("input", true, true, window, 1);
+
+                //coloca a mensagem na caixa
+                messageBox.dispatchEvent(event);
+
+                try {
+                    document.querySelector('span[data-icon="send"]').click();
+                } catch (err) {
+                    console.log("mensagem enviada :" + err.message);
+                }
+            } catch (err) {
+                console.log("ou você já está no grupo ou ele está lotado");
+
+                linkDegruposComErro.push(linkapi);
+            }
+
+        }
+        //======================================
+
+    }, 3000)
+    //======================================
+    //clica para enviar
+    setTimeout(function () {
+        try {
+            document.querySelector('span[data-icon="send"]').click();
+        } catch (err) {
+            console.log("mensagem enviada :" + err.message);
+        }
+
+
+    }, 6000)
+    //======================================
+    //verificando erros
+
+    console.log("total de links com erro: " + linkDegruposComErro.length + " link que apresentaram erro: " + linkDegruposComErro);
+    //======================================
+
+}
+
+
+//=========================================================================================
+var tempototal = 1200000
+var contaTempo = 0;
+var minutos = 0;
+setInterval(function () {
+    tempototal = tempototal - 1000
+    console.log(minutos + " : " + contaTempo + " tempo restante: " + tempototal);
+    contaTempo = contaTempo + 1;
+    if (contaTempo >= 60) {
+        minutos = minutos + 1;
+        //console.log("zerando conta tempo...")
+        contaTempo = 0;
+
+    }
+}, 1000)
+setInterval(function () {
+    var contador = 0;
+    console.log("iniciando bot automatico")
+    setInterval(() => {
+        if (contador < listaGrupos.length) {
+            //        send(listaGrupos[contador], mensagem);
+            var numeroTotalAnuncios = totalAnuncios.length;
+
+            var numeroAleatorio = Math.floor(Math.random() * (0 - numeroTotalAnuncios)) + numeroTotalAnuncios;
+
+            var mensagem = totalAnuncios[numeroAleatorio];
+            send(listaGrupos[contador], mensagem);
+            console.log("link do grupo:" + listaGrupos[contador] + " msg:" + mensagem);
+            contador = contador + 1;
+        }
+        if (contador > listaGrupos.length) {
+            console.log("fim do script");
+        }
+        //aqui executa os anuncios cada um deles a cada 10 segundos
+    }, 10000);
+    //60000 igual a 1 minuto 
+    //600000 10 minutos 
+    //3600000 1 hora
+    console.log("zerando cronometro")
+    minutos = 0;
+    tempototal = 1200000
+}, 2400000)
+
+
+
+contador1 = 0;
+//teste para iniciar a primeira execução antes de esperar o tempo
+console.log("iniciando primeira execução")
+ var primeiro = setInterval(() => {
+    if (contador1 < listaGrupos.length) {
+        //        send(listaGrupos[contador], mensagem);
+        var numeroTotalAnuncios = totalAnuncios.length;
+
+        var numeroAleatorio = Math.floor(Math.random() * (0 - numeroTotalAnuncios)) + numeroTotalAnuncios;
+
+        var mensagem = totalAnuncios[numeroAleatorio];
+        send(listaGrupos[contador1], mensagem);
+        console.log("link do grupo:" + listaGrupos[contador1] + " msg:" + mensagem);
+        contador1 = contador1 + 1;
+    }
+    if (contador1 > listaGrupos.length) {
+        clearInterval(primeiro);
+        console.log("fim da primeria execução");
+    }
+    //aqui executa os anuncios cada um deles a cada 10 segundos
+}, 10000);
+
+                 </textarea>
+                    </center>
+                </TD>
+            </TR>
+        </TAble>
+    </center>
+    <br><br><br>
+    <hr>
+    <button class="accordion">DUVIDAS SOBRE OS LINKS DOS GRUPOS</button>
+    <div class="panel">
+        <p>OS LINKS SÃO DOS GRUPOS SÃO PEGOS NAS DESCRIÇÕES DO GRUPOS QUANDO VOCÊ É ADIMINISTRADOR OU RECEBE UM CONVITE
+            VEJA UM EXEMPLO DE UM LINK DE GRUPO : https://chat.whatsapp.com/Llg76lHYRyV1tma45avKEa.</p>
+    </div>
+
+    <button class="accordion">DUVIDAS SOBRE AS MENSAGENS</button>
+    <div class="panel">
+        <p>AS MENSAGENS A SEREM ENVIADAS PODEM SER SEPARADAS POR *** VEJA O EXEMPLO: ESSA É A MENSAGEM 01 *** ESSA É A
+            MESNAGEM 02 *** ESSA É A MENSAGEM 03. VOCÊ PODER COLOCAR QUANTAS MENSAFGENS QUISER</p>
+    </div>
+
+    <button class="accordion">DUVIDAS SOBRE COMO COLOCAR O CODIGO NO CHROME</button>
+    <div class="panel">
+        <p>PARA COLOCAR O BOT NO CHROME ABRA O GOOGLE CHROME NO SEU COMPUTADOR, LOGUE COM SEU WHATSAPP WEB, AO ENTRAR NO
+            WHATSAPP WEB APOS LOGADO APERTE <B>F12</B> VÁ PARA A ABA <B>CONSOLE</B> NA PARTE SUPERIOR LADO ESQUERDO,
+            COLE O CODIGO GERADO E APERTE <B>ENTER</B>.</p>
+    </div>
+
+    <script>
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var panel = this.nextElementSibling;
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                } else {
+                    panel.style.display = "block";
+                }
+            });
+        }
+    </script>
+    <BR></BR>
+    <BR></BR>
+    <hr>
+    <div>
+        <CENTER>FERRAMENTA DESENVOLVIDA POR CLAUDIO S. S. ULTIMA ATUALIZAÇÃO 13/02/2021</CENTER>
+    </div>
+    <hr>
+</body>
+
+</html>
